@@ -1,0 +1,18 @@
+dist: bionic
+
+env:
+  global:
+    - VERSION=2.11.4
+    - IMAGE_NAME=worstass/saleor-dashboard:${VERSION}
+
+services:
+  - docker
+
+before_install
+  - git clone -b ${CODE_TAG} --depth 1 https://github.com/mirumee/saleor-dashboard.git
+  - docker login -u ${DOCKER_USER} -p ${DOCKER_PWD}
+  
+script:
+  - cp Dockerfile saleor-dashboard/
+  - cd saleor-dashboard
+  - docker build -t ${IMAGE_NAME} -f Dockerfile .
